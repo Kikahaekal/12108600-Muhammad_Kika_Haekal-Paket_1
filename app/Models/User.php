@@ -19,6 +19,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'username',
+        'role',
+        'address',
         'password',
     ];
 
@@ -43,5 +46,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function books()
+    {
+        return $this->belongsToMany(Book::class)->withPivot('borrow_date', 'return_date', 'status');
+    }
+
+    public function collections()
+    {
+        return $this->hasMany(Collection::class);
     }
 }
