@@ -24,8 +24,10 @@ class CollectionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Collection $collection)
+    public function destroy($id)
     {
-        //
+        Collection::destroy($id);
+
+        return back();
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('borrow_date');
             $table->date('return_date')->nullable();
+            $table->date('due_date')->nullable();
             $table->tinyInteger('status');
         });
     }

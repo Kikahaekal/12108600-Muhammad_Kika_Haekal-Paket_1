@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DataPeminjamanExport;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RouteController extends Controller
 {
@@ -77,5 +79,62 @@ class RouteController extends Controller
         }
 
         return view('landing.page.detail', compact('book', 'user', 'book_status'));
+    }
+
+    public function koleksi()
+    {
+        $user = User::with('collections')->where('id', Auth::user()->id)->first();
+        $collections = [];
+
+        foreach($user->collections as $collection) {
+            $collections[] = Book::where('id', $collection->book_id)->first();
+        }
+
+        return view('koleksi.index', compact('collections', 'user'));
+    }
+
+    public function data_peminjaman_user()
+    {
+        $user = User::with('books')->where('id', Auth::user()->id)->first();
+
+        return view('peminjaman.index', compact('user'));
+    }
+
+    public function data_peminjaman_admin()
+    {
+        $users = User::with('books')->where('role', 'user')->get();
+
+        return view('admin.peminjaman.index', compact('users'));
+    }
+
+    public function users()
+    {
+        $users = User::where('role', 'user')->orWhere('role', 'staff')->get();
+
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function edit_user($id)
+    {
+        $user = User::find($id);
+
+        return view('admin.users.page.edit', compact('user'));
+    }
+
+    public function detail_user($id)
+    {
+        $user = User::find($id);
+
+        return view('admin.users.page.detail', compact('user'));
+    }
+
+    public function export_peminjaman()
+    {
+        return Excel::download(new DataPeminjamanExport, 'peminjaman.xlsx');
+    }
+
+    public function error()
+    {
+        return view('error');
     }
 }

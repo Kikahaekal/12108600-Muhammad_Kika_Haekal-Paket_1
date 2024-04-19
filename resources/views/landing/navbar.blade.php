@@ -8,11 +8,31 @@
           <li class="nav-item">
             <a class="navbar-brand" href="/landing">Home</a>
           </li>
+          @if(Auth::user()->role == 'user')
+          <li class="nav-item">
+            <a class="navbar-brand" href="/koleksi">Koleksi</a>
+          </li>
+          <li class="nav-item">
+            <a class="navbar-brand" href="/peminjaman_user">Peminjaman</a>
+          </li>
+          @elseif (Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
           <li class="nav-item">
             <a class="navbar-brand" href="/buku">Buku</a>
           </li>
           <li class="nav-item">
             <a class="navbar-brand" href="/kategori">Kategori</a>
+          </li>
+          <li class="nav-item">
+            <a class="navbar-brand" href="/peminjaman_admin">Data Peminjaman</a>
+          </li>
+          @endif
+          @if(Auth::user()->role == 'admin')
+          <li class="nav-item">
+            <a class="navbar-brand" href="/users">Users</a>
+          </li>
+          @endif
+          <li class="nav-item">
+            <a class="navbar-brand text-danger" href="/logout">Logout</a>
           </li>
         </ul>
       </div>

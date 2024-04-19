@@ -30,16 +30,19 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Review $review)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $request->validate([
+            'comment' => 'required',
+            'rating' => 'required'
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Review $review)
-    {
-        //
+        $data = $request->only('comment', 'rating');
+        $data['user_id'] = Auth::user()->id;
+        $data['book_id'] = $request->book_id;
+
+        Review::find($id)->update($data);
+
+        return back();
     }
 }

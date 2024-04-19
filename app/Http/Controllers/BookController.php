@@ -103,6 +103,7 @@ class BookController extends Controller
         if($exists) {
             $user->books()->updateExistingPivot($id, [
                 'borrow_date' => Carbon::now(),
+                'due_date' => Carbon::now()->addDays(2),
                 'return_date' => null,
                 'status' => 1,
             ]);
@@ -116,6 +117,7 @@ class BookController extends Controller
 
         $user->books()->attach($id, [
             'borrow_date' => Carbon::now(),
+            'due_date' => Carbon::now()->addDays(2),
             'status' => 1,
         ]);
 
@@ -141,6 +143,17 @@ class BookController extends Controller
         ]);
 
         return back()->with('success_return', '');
+    }
+
+    public function tarik_peminjaman($id)
+    {
+        $user = User::find(Auth::user()->id);
+        $user->books()->updateExistingPivot($id, [
+            'return_date' => Carbon::now(),
+            'status' => 0
+        ]);
+
+        return back()->with('success_pull', '');
     }
 
     /**

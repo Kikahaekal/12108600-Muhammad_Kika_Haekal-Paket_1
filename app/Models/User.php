@@ -57,4 +57,27 @@ class User extends Authenticatable
     {
         return $this->hasMany(Collection::class);
     }
+
+    public static function getPeminjaman()
+    {
+        $users = self::with('books')->get();
+        $data = [];
+
+        foreach($users as $key => $user) {
+            if(count($user->books) != 0) {
+                foreach($user->books as $book) {
+                    $data[] = [
+                        'no' => ++$key,
+                        'nama' => $user->name,
+                        'buku yang dipinjam' => $book->title,
+                        'tanggal peminjaman' => \Carbon\Carbon::parse($book->pivot->borrow_date)->format('j F Y'),
+                        'tanggal pengembalian' => $book->pivot->return_date == null ? 'Belum dikembalikan' : \Carbon\Carbon::parse($book->pivot->return_date)->format('j F Y'),
+                        'status' => $book->pivot->status == 1 ? 'Dipinjam' : 'Dikembalikan'
+                    ];
+                }
+            } 
+        }
+
+        return collect($data);
+    }
 }

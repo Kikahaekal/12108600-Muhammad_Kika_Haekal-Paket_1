@@ -41,6 +41,47 @@ class UserController extends Controller
         return redirect('/')->with('success_register', '');
     }
 
+    public function add_user(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'username' => 'required',
+            'email' => 'required|email:dns',
+            'password' => 'required',
+            'address' => 'required',
+            'role' => 'required',
+        ]);
+
+        $data = $request->only('name','username','email','address', 'role');
+        $data['password'] = Hash::make($request->password);
+
+        User::create($data);
+        return back()->with('success_add', '');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'username' => 'required',
+            'email' => 'required|email:dns',
+            'address' => 'required',
+            'role'=> 'required',
+        ]);
+
+        $data = $request->only('name','username','email','address', 'role');
+        User::find($id)->update($data);
+
+        return redirect('/users')->with('success_updated', '');
+    }
+
+    public function destroy($id)
+    {
+        User::destroy($id);
+
+        return back();
+    }
+
     public function logout()
     {
         Auth::logout();

@@ -4,6 +4,9 @@
 <div class="container mt-4">
     <div class="card">
         <div class="card-body">
+            <div class="mb-3">
+                <a href="/buku" class="btn btn-danger">Kembali</a>
+            </div>
             <div class="row">
                 <div class="col-md-4">
                     <img src="{{ asset('img/'. $book->cover) }}" alt="cover" class="w-75 h-100">
