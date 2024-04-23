@@ -128,9 +128,15 @@ class RouteController extends Controller
         return view('admin.users.page.detail', compact('user'));
     }
 
-    public function export_peminjaman()
+    public function filter_peminjaman(Request $request)
     {
-        return Excel::download(new DataPeminjamanExport, 'peminjaman.xlsx');
+        // dd($request->name);
+        return $this->export_peminjaman($request->name);
+    }
+
+    public function export_peminjaman($name) 
+    {
+        return Excel::download(new DataPeminjamanExport($name), 'peminjaman.xlsx');
     }
 
     public function error()

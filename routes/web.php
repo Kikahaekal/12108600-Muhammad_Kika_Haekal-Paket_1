@@ -25,7 +25,7 @@ Route::middleware('isLogin')->group(function () {
         Route::get('/detail_buku/{id}', [RouteController::class,'detail_buku']);
         Route::get('/edit_buku/{id}', [RouteController::class,'edit_buku']);
         Route::get('/edit_kategori/{id}', [RouteController::class,'edit_kategori']);
-        Route::get('/export_peminjaman', [RouteController::class,'export_peminjaman']);
+        Route::post('/filter_peminjaman', [RouteController::class,'filter_peminjaman']);
         Route::post('/tarik_peminjaman/{id}', [BookController::class,'tarik_peminjaman']);
         Route::post('/add_buku', [BookController::class,'store']);
         Route::put('/update_buku/{id}', [BookController::class,'update']);

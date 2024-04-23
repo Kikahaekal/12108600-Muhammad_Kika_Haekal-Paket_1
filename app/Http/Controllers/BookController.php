@@ -145,12 +145,18 @@ class BookController extends Controller
         return back()->with('success_return', '');
     }
 
-    public function tarik_peminjaman($id)
+    public function tarik_peminjaman(Request $request, $id)
     {
-        $user = User::find(Auth::user()->id);
+        $user = User::find($request->user_id);
+        $book = Book::find($id);
+
         $user->books()->updateExistingPivot($id, [
             'return_date' => Carbon::now(),
             'status' => 0
+        ]);
+
+        $book->update([
+            'stock' => $book->stock + 1
         ]);
 
         return back()->with('success_pull', '');

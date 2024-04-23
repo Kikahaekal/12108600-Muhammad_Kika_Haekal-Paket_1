@@ -50,7 +50,7 @@ class User extends Authenticatable
 
     public function books()
     {
-        return $this->belongsToMany(Book::class)->withPivot('borrow_date', 'return_date', 'status');
+        return $this->belongsToMany(Book::class)->withPivot('borrow_date', 'return_date', 'status', 'due_date');
     }
 
     public function collections()
@@ -58,16 +58,17 @@ class User extends Authenticatable
         return $this->hasMany(Collection::class);
     }
 
-    public static function getPeminjaman()
+    public static function getPeminjaman($name)
     {
-        $users = self::with('books')->get();
         $data = [];
-
-        foreach($users as $key => $user) {
-            if(count($user->books) != 0) {
-                foreach($user->books as $book) {
+        $users = self::with('books')->when($name, function ($query) use ($name) {
+            return $query->where('name', $name);
+        })->get();
+    
+        foreach ($users as $user) {
+            if (count($user->books) != 0) {
+                foreach ($user->books as $book) {
                     $data[] = [
-                        'no' => ++$key,
                         'nama' => $user->name,
                         'buku yang dipinjam' => $book->title,
                         'tanggal peminjaman' => \Carbon\Carbon::parse($book->pivot->borrow_date)->format('j F Y'),
@@ -75,9 +76,9 @@ class User extends Authenticatable
                         'status' => $book->pivot->status == 1 ? 'Dipinjam' : 'Dikembalikan'
                     ];
                 }
-            } 
+            }
         }
-
-        return collect($data);
+    
+        return count($data) > 0 ? collect($data) : null;
     }
 }
