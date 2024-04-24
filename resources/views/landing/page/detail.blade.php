@@ -82,7 +82,6 @@
                     @endif
                 </div>
             </div>
-            @endif
             <div class="comment-section mt-5">
                 @if(!$book->reviews->contains('user_id', Auth::user()->id))
                 <h5>Ulasan Anda</h5>
@@ -154,6 +153,7 @@
                 </div>
                 @endif
             </div>
+            @endif
         </div>
     </div>
 </div>

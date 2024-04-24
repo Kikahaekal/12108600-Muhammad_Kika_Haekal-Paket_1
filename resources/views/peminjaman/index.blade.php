@@ -12,6 +12,7 @@
                 <th>Judul</th>
                 <th>Dipinjam pada</th>
                 <th>Dikembalikan pada</th>
+                <th>Batas Peminjaman</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                 <td>{{ $book->title }}</td>
                 <td>{{ \Carbon\Carbon::parse($book->pivot->borrow_date)->format('j F Y') }}</td>
                 <td>{{ $book->pivot->return_date != null ? \Carbon\Carbon::parse($book->pivot->return_date)->format('j F Y') : 'Belum dikembalikan' }}</td>
+                <td>{{ \Carbon\Carbon::parse($book->pivot->due_date)->format('j F Y') }}</td>
                 <td>{{ $book->pivot->status == 1 ? 'Dipinjam' : 'Dikembalikan' }}</td>
             </tr>
             @endforeach
